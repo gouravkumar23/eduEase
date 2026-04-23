@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    /* Use min-height instead of fixed height to prevent iOS scroll bounce issues */
+    @apply min-h-screen;
+    height: auto;
+    /* Enable momentum scrolling globally for the root */
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Ensure all scrollable containers have momentum scrolling on iOS */
+.overflow-y-auto, 
+.overflow-x-auto, 
+.overflow-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent horizontal scroll on mobile while allowing vertical momentum */
+body {
+  overflow-x: hidden;
+}
