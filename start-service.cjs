@@ -5,7 +5,7 @@ require('dotenv').config();
 const { startSMTPServer } = require('./local_smtp_server/index.cjs');
 
 // 1. Initialize Firebase Admin
-const serviceAccount = require('./scripts/smartquizhub-818ac-firebase-adminsdk-fbsvc-d8d493774e.json');
+const serviceAccount = require('./scripts/eduease-service-account.json');
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -23,7 +23,7 @@ async function startService() {
     // 2. Start the local SMTP backend in the current process
     await startSMTPServer();
     
-    console.log('✅ SMTP Server is active.');
+    console.log('✅ EduEase SMTP Server is active.');
     console.log(`ℹ️  Local Port: ${SMTP_PORT}`);
     console.log('--------------------------------------------------');
     console.log('👉 ACTION REQUIRED:');
@@ -39,7 +39,7 @@ async function startService() {
 
     // Handle graceful shutdown
     const cleanup = async () => {
-      console.log('\n👋 Shutting down SMTP service...');
+      console.log('\n👋 Shutting down EduEase SMTP service...');
       try {
         await db.collection('settings').doc('system').update({
           service_status: 'offline'

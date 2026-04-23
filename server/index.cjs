@@ -13,13 +13,13 @@ try {
   
   if (process.env.FIREBASE_SERVICE_ACCOUNT) {
     serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    console.log('✅ Firebase Admin: Initializing from Environment Variable');
+    console.log('✅ EduEase Admin: Initializing from Environment Variable');
   } else {
     // Attempt to load from file
-    const path = '../scripts/smartquizhub-818ac-firebase-adminsdk-fbsvc-d8d493774e.json';
+    const path = '../scripts/eduease-service-account.json';
     console.log(`[INIT] Attempting to load service account from: ${path}`);
     serviceAccount = require(path);
-    console.log('✅ Firebase Admin: Initializing from Local File');
+    console.log('✅ EduEase Admin: Initializing from Local File');
   }
 
   if (!admin.apps.length) {
@@ -116,5 +116,5 @@ app.post('/send-email', async (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Quiz backend active on port ${PORT}`);
+  console.log(`EduEase backend active on port ${PORT}`);
 });
