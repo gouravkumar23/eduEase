@@ -119,7 +119,7 @@ export default function AdminSettings() {
         body: JSON.stringify({
           to: user.email,
           subject: 'EduEase Relay Test',
-          html: '<h3>Relay is working!</h3><p>This email was sent via the Quiz Backend relaying to the Universal Mailer.</p>',
+          html: '<h3>Relay is working!</h3><p>This email was sent via the Render-deployed Quiz Backend relaying to the Qwerty Mailing Service.</p>',
           text: 'Relay is working!',
           isOTP: false
         })
@@ -195,7 +195,7 @@ export default function AdminSettings() {
                   value={emailServiceUrl} 
                   onChange={(e) => setEmailServiceUrl(e.target.value)} 
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all" 
-                  placeholder="https://eduease-api.onrender.com" 
+                  placeholder="https://eduease-relay.onrender.com" 
                   required 
                 />
               </div>
