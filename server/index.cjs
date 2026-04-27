@@ -29,7 +29,6 @@ try {
   }
 } catch (error) {
   console.error('❌ FIREBASE ADMIN INIT FAILED:', error.message);
-  console.error('This is likely why you are getting a 500 error on /api/notify.');
 }
 
 const db = admin.firestore();
@@ -44,13 +43,8 @@ app.post('/api/notify', async (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  // Check if Admin SDK initialized correctly
   if (!admin.apps.length) {
-    console.error('[API_ERROR] Cannot send notification: Firebase Admin SDK not initialized.');
-    return res.status(500).json({ 
-      error: 'Firebase Admin SDK not initialized on server.',
-      tip: 'Check Render logs for "FIREBASE ADMIN INIT FAILED"'
-    });
+    return res.status(500).json({ error: 'Firebase Admin SDK not initialized.' });
   }
 
   const message = {
@@ -85,31 +79,44 @@ app.post('/api/notify', async (req, res) => {
 });
 
 /**
- * Relay endpoint for sending emails
+ * Relay endpoint for sending emails via Qwerty Mailing Service
  */
 app.post('/send-email', async (req, res) => {
   const { to, subject, html, text } = req.body;
-  const mailBackendUrl = process.env.MAIL_BACKEND_URL;
-  const apiKey = process.env.MAIL_SERVICE_API_KEY || process.env.SECRET_KEY;
+  const apiKey = process.env.MAILING_SERVICE_API_KEY;
 
-  if (!mailBackendUrl || !apiKey) {
-    return res.status(500).json({ error: 'Backend not configured' });
+  if (!apiKey) {
+    console.error('[CONFIG_ERROR] MAILING_SERVICE_API_KEY is missing in .env');
+    return res.status(500).json({ error: 'Mailing service not configured on server' });
   }
 
   try {
-    const response = await fetch(`${mailBackendUrl}/send-mail`, {
+    // Qwerty Mailing Service expects "to" as an array of strings
+    const recipients = Array.isArray(to) ? to : [to];
+
+    const response = await fetch('https://qwertymailingservice.onrender.com/send-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-service-key': apiKey,
-        'ngrok-skip-browser-warning': 'true'
+        'x-api-key': apiKey
       },
-      body: JSON.stringify({ project: "eduease", to, subject, html: html || text })
+      body: JSON.stringify({ 
+        to: recipients, 
+        subject, 
+        html: html || text 
+      })
     });
 
     const result = await response.json();
-    res.status(response.status).json(result);
+    
+    if (!response.ok) {
+      console.error('[MAILING_SERVICE_ERROR]', result);
+      return res.status(response.status).json({ success: false, error: result.error || 'External service error' });
+    }
+
+    res.status(200).json({ success: true, data: result });
   } catch (error) {
+    console.error('[RELAY_CRITICAL_FAILURE]', error.message);
     res.status(500).json({ error: 'Relay failed', details: error.message });
   }
 });
