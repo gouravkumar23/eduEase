@@ -1,31 +1,27 @@
 # EduEase - Full Stack Operational Guide
 
-This guide covers the complete setup, deployment, and integration of the EduEase platform using the **Secure Relay Architecture**.
+This guide covers the complete setup, deployment, and integration of the EduEase platform using the **Secure Relay Architecture** powered by **Qwerty Mailing Service**.
 
 ---
 
 ## 🏗️ Architecture Overview
 1. **Frontend**: React app that triggers events.
-2. **Quiz Backend (Relay - Render)**: Validates requests and holds the secret API Key.
-3. **Universal Mailer (Transport - Local)**: Standalone service that actually talks to SMTP servers.
+2. **Quiz Backend (Relay - Render)**: Validates requests and holds the secret Qwerty API Key.
+3. **Qwerty Mailing Service (Transport - Cloud)**: External service that handles high-deliverability email dispatch.
 
 ---
 
-## 📧 Step 1: Local SMTP Server Setup
-Ensure your local `.env` file (inside `local_smtp_server/` or root) has these:
-- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`: Your email provider credentials.
-- `SECRET_KEY`: A strong secret (e.g., `my-super-secret-123`).
-- `PORT`: 5000.
-
-**Run it:** `node local_smtp_server/index.cjs`
-**Expose it:** `ngrok http 5000` (Copy the `https://...` URL provided by ngrok).
+## 📧 Step 1: Mailing Service Configuration
+Ensure your `.env` file (on Render or local relay) has this:
+- `MAILING_SERVICE_API_KEY`: Your unique key provided by the Qwerty Mailing Service.
+- `PORT`: 3001 (for the relay).
 
 ---
 
 ## 🚀 Step 2: Quiz Backend Setup (Render)
 Go to your Render Dashboard for the Quiz Backend and set these **Environment Variables**:
-1. `MAIL_BACKEND_URL`: Your **ngrok URL** from Step 1.
-2. `MAIL_SERVICE_API_KEY`: Must match the `SECRET_KEY` from Step 1.
+1. `MAILING_SERVICE_API_KEY`: Your Qwerty API Key.
+2. `FIREBASE_SERVICE_ACCOUNT`: The JSON string of your Firebase service account.
 3. `PORT`: 3001.
 
 ---
@@ -42,7 +38,9 @@ Go to your Render Dashboard for the Quiz Backend and set these **Environment Var
 ## 💻 Summary of Variables
 | Variable | Location | Purpose |
 | :--- | :--- | :--- |
-| `MAIL_BACKEND_URL` | Render | Tells Render where your local ngrok server is. |
-| `MAIL_SERVICE_API_KEY` | Render | The password Render uses to talk to your local server. |
-| `SECRET_KEY` | Local | The password your local server expects from Render. |
-| `SMTP_...` | Local | Your actual email account details. |
+| `MAILING_SERVICE_API_KEY` | Render / Local | The password used to authenticate with Qwerty. |
+| `FIREBASE_SERVICE_ACCOUNT` | Render | Allows the relay to send FCM push notifications. |
+| `VITE_API_URL` | Frontend | Points the frontend to your Render relay. |
+
+---
+*Note: Local SMTP setup is no longer required as the system now uses a cloud-based transport.*
