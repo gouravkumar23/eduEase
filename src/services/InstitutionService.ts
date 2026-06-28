@@ -1,6 +1,7 @@
 "use client";
 
 import { InstitutionRepository, Institution } from '../repositories/InstitutionRepository';
+import { AuditService } from './AuditService';
 
 export class InstitutionService {
   /**
@@ -58,5 +59,58 @@ export class InstitutionService {
     institution.status = status;
     institution.updatedAt = new Date().toISOString();
     await InstitutionRepository.save(institution);
+  }
+
+  /**
+   * Updates the profile details of an institution and logs the action.
+   */
+  public static async updateInstitutionProfile(
+    institutionId: string,
+    profileData: Partial<Omit<Institution, 'institutionId' | 'createdAt'>>,
+    userId: string,
+    userName: string,
+    userRole: string
+  ): Promise<Institution> {
+    const institution = await InstitutionRepository.getById(institutionId);
+    if (!institution) {
+      throw new Error('Institution not found.');
+    }
+
+    const updatedInstitution: Institution = {
+      ...institution,
+      ...profileData,
+      updatedAt: new Date().toISOString()
+    };
+
+    try {
+      await InstitutionRepository.save(updatedInstitution);
+
+      // Log the action in the audit log
+      await AuditService.logAction(
+        userId,
+        userName,
+        userRole,
+        'Update Profile',
+        `Institution Profile for ${institutionId}`,
+        'Institution Profile',
+        'success',
+        { institutionName: updatedInstitution.institutionName }
+      );
+
+      return updatedInstitution;
+    } catch (error: any) {
+      // Log failed attempt
+      await AuditService.logAction(
+        userId,
+        userName,
+        userRole,
+        'Update Profile',
+        `Institution Profile for ${institutionId}`,
+        'Institution Profile',
+        'failed',
+        { error: error.message }
+      );
+      throw error;
+    }
   }
 }
