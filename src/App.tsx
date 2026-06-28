@@ -24,11 +24,17 @@ import VerifyLinkHandler from './components/VerifyLinkHandler';
 import AILearningHub from './components/AILearningHub';
 import { useFCM } from './hooks/useFCM';
 
-// Enterprise Phase 1 Imports
+// Enterprise Phase 1 & 2 Imports
 import DeveloperPortalPage from './pages/DeveloperPortalPage';
-import InstitutionComingSoonPage from './pages/InstitutionComingSoonPage';
 import DeveloperGuard from './components/DeveloperGuard';
 import NotFoundPage from './pages/NotFoundPage';
+import InstitutionGuard from './components/InstitutionGuard';
+import InstitutionPortalLayout from './pages/institution/InstitutionPortalLayout';
+import InstitutionDashboard from './pages/institution/InstitutionDashboard';
+import InstitutionSettings from './pages/institution/InstitutionSettings';
+import LicensesPage from './pages/institution/LicensesPage';
+import SubscriptionsPage from './pages/institution/SubscriptionsPage';
+import DownloadsPage from './pages/institution/DownloadsPage';
 
 function AppContent() {
   const { user, loading, logout, setSessionError } = useAuth();
@@ -86,8 +92,22 @@ function AppContent() {
         } 
       />
 
-      {/* Institution Coming Soon Route */}
-      <Route path="/institution" element={<InstitutionComingSoonPage />} />
+      {/* Institution Portal Routes */}
+      <Route 
+        path="/institution" 
+        element={
+          <InstitutionGuard>
+            <InstitutionPortalLayout />
+          </InstitutionGuard>
+        }
+      >
+        <Route index element={<Navigate to="dashboard" replace />} />
+        <Route path="dashboard" element={<InstitutionDashboard />} />
+        <Route path="settings" element={<InstitutionSettings />} />
+        <Route path="licenses" element={<LicensesPage />} />
+        <Route path="subscriptions" element={<SubscriptionsPage />} />
+        <Route path="downloads" element={<DownloadsPage />} />
+      </Route>
 
       {/* Public Routes */}
       <Route path="/profile/:userId" element={<PublicProfile />} />
@@ -140,50 +160,3 @@ function App() {
 }
 
 export default App;
-</dyad-file>
-
-I have successfully completed Phase 1 of the EduEase Enterprise Update. Here is a summary of the changes:
-
-1. **Existing Features Verified**: All existing portals (Student, Faculty, Admin), authentication, exam system, AI question generation, proctoring, and analytics remain fully functional and backward compatible.
-2. **New Folders Created**: Created `src/services`, `src/repositories`, and `src/pages` to house the new enterprise architecture.
-3. **New Collections Added**: Prepared the Firestore schema for `developers/`, `institutions/`, `licenses/`, `subscriptions/`, `featureFlags/`, and `system/`.
-4. **Routes Added**: Added the hidden `/internal/developer` route (secured via `DeveloperGuard`) and the `/institution` coming soon route.
-5. **Services Created**: Created `PermissionService`, `FeatureFlagService`, `DeveloperService`, and `InstitutionService`.
-6. **Repositories Created**: Created `DeveloperRepository` and `InstitutionRepository`.
-7. **Permission Architecture**: Implemented a global permission system mapping roles to specific capabilities.
-8. **Feature Flag Architecture**: Implemented a dynamic feature flag system to toggle enterprise modules.
-9. **Developer Bootstrap Implemented**: Added a secure bootstrap flow that allows the creation of the first developer account only when the collection is empty.
-10. **Backward Compatibility Verification**: Verified that existing users can log in and access their portals without any database migration.
-11. **Warnings**: Ensure that the `developers/` collection is secured in your Firestore rules to prevent unauthorized writes.
-
-=================================================
-
-✅ PHASE 1 ENTERPRISE UPDATE COMPLETED SUCCESSFULLY
-
-=================================================
-
-<dyad-chat-summary>Completed Phase 1 Enterprise Foundation Upgrade</dyad-chat-summary><dyad-write path="src/utils/enterpriseTest.ts" description="Creating a verification utility to test the new Enterprise Phase 1 architecture">import { PermissionService } from '../services/PermissionService';
-import { FeatureFlagService } from '../services/FeatureFlagService';
-
-/**
- * Verification utility to test the Enterprise Phase 1 architecture.
- * This ensures all services, permissions, and feature flags are fully operational.
- */
-export async function verifyEnterpriseArchitecture() {
-  console.log('--- STARTING ENTERPRISE ARCHITECTURE VERIFICATION ---');
-
-  // 1. Verify Static Permissions
-  const devHasUsers = PermissionService.hasPermission('developer', 'manage_users');
-  const studentHasUsers = PermissionService.hasPermission('student', 'manage_users');
-  console.log(`[VERIFY] Developer has 'manage_users': ${devHasUsers} (Expected: true)`);
-  console.log(`[VERIFY] Student has 'manage_users': ${studentHasUsers} (Expected: false)`);
-
-  // 2. Verify Feature Flags
-  const aiEnabled = await FeatureFlagService.isEnabled('AI Enabled');
-  const paymentsEnabled = await FeatureFlagService.isEnabled('Payments Enabled');
-  console.log(`[VERIFY] 'AI Enabled' flag: ${aiEnabled} (Expected: true)`);
-  console.log(`[VERIFY] 'Payments Enabled' flag: ${paymentsEnabled} (Expected: false)`);
-
-  console.log('--- ENTERPRISE ARCHITECTURE VERIFICATION COMPLETED ---');
-  return devHasUsers && !studentHasUsers && aiEnabled && !paymentsEnabled;
-}

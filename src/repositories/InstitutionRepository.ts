@@ -1,17 +1,41 @@
+"use client";
+
 import { db } from '../lib/firebase';
 import { doc, getDoc, setDoc, collection, getDocs } from 'firebase/firestore';
 
 export interface Institution {
-  id: string;
-  name: string;
-  domain: string;
+  institutionId: string;
+  institutionName: string;
+  institutionType: 'university' | 'college' | 'school' | 'corporate' | 'other';
+  registrationNumber?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: string;
+  website?: string;
+  contactEmail: string;
+  contactPhone?: string;
+  logo?: string;
   createdAt: string;
-  status: 'active' | 'suspended';
+  updatedAt: string;
+  status: 'active' | 'suspended' | 'pending';
+  subscriptionId?: string;
+  licenseId?: string;
+  domain: string;
   settings: {
     secureBrowserRequired: boolean;
     aiEnabled: boolean;
     maxUsers: number;
+    allowedDomains?: string[];
   };
+  analytics?: {
+    totalExamsConducted?: number;
+    totalActiveStudents?: number;
+    totalActiveFaculty?: number;
+  };
+  featureFlags?: Record<string, boolean>;
+  metadata?: Record<string, any>;
 }
 
 export class InstitutionRepository {
@@ -36,7 +60,7 @@ export class InstitutionRepository {
    */
   public static async save(institution: Institution): Promise<void> {
     try {
-      await setDoc(doc(db, 'institutions', institution.id), institution, { merge: true });
+      await setDoc(doc(db, 'institutions', institution.institutionId), institution, { merge: true });
     } catch (error) {
       console.error('Error saving institution:', error);
       throw error;

@@ -1,3 +1,5 @@
+"use client";
+
 import { db } from '../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -9,7 +11,14 @@ export type Permission =
   | 'manage_system'
   | 'manage_developers'
   | 'view_reports'
-  | 'manage_payments';
+  | 'manage_payments'
+  // New Institution Permissions
+  | 'manage_admins'
+  | 'manage_downloads'
+  | 'manage_members'
+  | 'manage_analytics'
+  | 'manage_secure_browser'
+  | 'manage_settings';
 
 export class PermissionService {
   private static rolePermissions: Record<string, Permission[]> = {
@@ -22,6 +31,12 @@ export class PermissionService {
       'manage_developers',
       'view_reports',
       'manage_payments',
+      'manage_admins',
+      'manage_downloads',
+      'manage_members',
+      'manage_analytics',
+      'manage_secure_browser',
+      'manage_settings',
     ],
     institution: [
       'manage_users',
@@ -29,11 +44,20 @@ export class PermissionService {
       'manage_institution',
       'manage_license',
       'view_reports',
+      'manage_admins',
+      'manage_downloads',
+      'manage_members',
+      'manage_analytics',
+      'manage_secure_browser',
+      'manage_settings',
     ],
     admin: [
       'manage_users',
       'manage_exams',
       'view_reports',
+      'manage_admins',
+      'manage_members',
+      'manage_settings',
     ],
     faculty: [
       'manage_exams',

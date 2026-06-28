@@ -1,3 +1,5 @@
+"use client";
+
 import { db } from '../lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
@@ -9,17 +11,34 @@ export type FeatureFlag =
   | 'Payments Enabled'
   | 'Analytics Enabled'
   | 'Question Generator Enabled'
-  | 'Developer Portal Enabled';
+  | 'Developer Portal Enabled'
+  // New Institution Feature Flags
+  | 'Roadmaps'
+  | 'Question Generator'
+  | 'AI'
+  | 'Secure Browser'
+  | 'Analytics'
+  | 'Developer Messages'
+  | 'Downloads';
 
 export class FeatureFlagService {
   private static defaultFlags: Record<FeatureFlag, boolean> = {
     'AI Enabled': true,
     'Roadmaps Enabled': false,
     'Secure Browser Enabled': false,
-    'Institution': false,
-    'Payments': false,
-    'Developer Portal': true
-  } as any;
+    'Institution Enabled': true,
+    'Payments Enabled': false,
+    'Analytics Enabled': true,
+    'Question Generator Enabled': true,
+    'Developer Portal Enabled': true,
+    'Roadmaps': false,
+    'Question Generator': true,
+    'AI': true,
+    'Secure Browser': false,
+    'Analytics': true,
+    'Developer Messages': true,
+    'Downloads': true
+  };
 
   /**
    * Gets the status of a feature flag from Firestore, falling back to defaults.
