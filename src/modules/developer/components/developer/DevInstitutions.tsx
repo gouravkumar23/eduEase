@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Building2, Search, Plus, CreditCard as Edit2, Trash2, Eye, X, Loader2, Check, Upload, AlertCircle, Globe, Mail, Phone, MapPin } from 'lucide-react';
-import { db } from '../../../core/firebase';
+import { db } from '../../../../core/firebase';
 import { collection, getDocs, doc, updateDoc, setDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { Institution } from '../../repositories/InstitutionRepository';
 

@@ -10,7 +10,7 @@ import {
   CheckCircle2,
   Clock
 } from 'lucide-react';
-import { db } from '../../../core/firebase';
+import { db } from '../../../../core/firebase';
 import { collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy, limit } from 'firebase/firestore';
 
 interface MailItem {

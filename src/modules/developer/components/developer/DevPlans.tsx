@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Layers, Plus, X, Loader2, Check, CreditCard as Edit2, Trash2, DollarSign } from 'lucide-react';
-import { db } from '../../../core/firebase';
+import { db } from '../../../../core/firebase';
 import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore';
-import { Plan, PlanService } from '../../services/PlanService';
+import { PlanService } from '../../../admin/services/PlanService';
+import { Plan } from '../../../admin/services/PlanService';
 
 export default function DevPlans() {
   const [plans, setPlans] = useState<Plan[]>([]);

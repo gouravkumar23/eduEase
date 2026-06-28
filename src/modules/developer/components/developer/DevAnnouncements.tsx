@@ -11,7 +11,7 @@ import {
   Building2,
   Calendar
 } from 'lucide-react';
-import { db } from '../../../core/firebase';
+import { db } from '../../../../core/firebase';
 import { collection, getDocs, addDoc, serverTimestamp, query, orderBy, limit } from 'firebase/firestore';
 import { Institution } from '../../repositories/InstitutionRepository';
 

@@ -8,8 +8,8 @@ import {
   serverTimestamp, doc, updateDoc, limit, getDocs 
 } from 'firebase/firestore';
 import { Send, X, MessageSquare, Megaphone, Lock, Unlock, Loader2, Paperclip, FileText, Download, BookOpen, Maximize2, Eye, ShieldCheck, Mail } from 'lucide-react';
-import MaterialPicker from '../../faculty';
-import DocumentPreview from '../../shared-ui';
+import { MaterialPicker } from '../../faculty';
+import { DocumentPreview } from '../../shared-ui';
 import { notifyEvent } from '../../notifications/services/notifications';
 import { templates } from '../../auth/utils/emailTemplates';
 

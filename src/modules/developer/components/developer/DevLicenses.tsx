@@ -12,11 +12,12 @@ import {
   Users,
   Building2
 } from 'lucide-react';
-import { db } from '../../../core/firebase';
+import { db } from '../../../../core/firebase';
 import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
-import { License, LicenseService } from '../../services/LicenseService';
-import { Institution } from '../../repositories/InstitutionRepository';
-import { Plan } from '../../services/PlanService';
+import { LicenseService } from '../../../licensing/services/LicenseService';
+import { License } from '../../../licensing/repositories/LicenseRepository';
+import { Institution } from '../../../institution/repositories/InstitutionRepository';
+import { Plan } from '../../../admin/services/PlanService';
 
 export default function DevLicenses() {
   const [licenses, setLicenses] = useState<License[]>([]);

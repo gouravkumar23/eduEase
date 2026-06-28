@@ -18,8 +18,7 @@ import { useRoadmap } from '../hooks/useRoadmap';
 import RoadmapTree from './RoadmapTree';
 import NodeEditor from './NodeEditor';
 import Breadcrumb from './Breadcrumb';
-import ImportDialog from '../../faculty';
-import ExportDialog from '../../faculty';
+import { ImportDialog, ExportDialog } from '../../faculty';
 import { RoadmapNode, NodeType } from '../repositories/RoadmapNodeRepository';
 
 interface RoadmapEditorProps {

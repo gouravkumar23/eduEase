@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Users, Key, CreditCard, Activity, ShieldAlert, BookOpen } from 'lucide-react';
-import StatCard from '../../components/StatCard';
+import { StatCard } from '../../analytics';
 
 export default function InstitutionDashboard() {
   return (

@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../core/firebase';
 import { FileText, ArrowLeft, BookOpen, User, Share2, Check, ShieldCheck, Download } from 'lucide-react';
-import DocumentPreview from '../../shared-ui';
+import { DocumentPreview } from '../../shared-ui';
 
 interface MaterialData {
   title: string;

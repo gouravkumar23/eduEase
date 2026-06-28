@@ -5,7 +5,7 @@ import { useAuth } from '../../../modules/auth';
 import { db } from '../../../core/firebase';
 import { collection, addDoc, query, where, onSnapshot, serverTimestamp, getDocs } from 'firebase/firestore';
 import { Plus, Users, Hash, ShieldAlert, X, Loader2, UserPlus, MessageSquare, Share2, Copy, Check, UserCheck } from 'lucide-react';
-import BulkMemberAssignment from '../../faculty';
+import { BulkMemberAssignment } from '../../faculty';
 import RoomChat from './RoomChat';
 import RoomMembersModal from './RoomMembersModal';
 

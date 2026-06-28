@@ -5,7 +5,7 @@ import { useAuth } from '../../../modules/auth';
 import { db } from '../../../core/firebase';
 import { collection, query, where, orderBy, onSnapshot, limit } from 'firebase/firestore';
 import { ShieldAlert, Search, Calendar, FileText, Maximize2, CameraOff, Loader2, AlertCircle } from 'lucide-react';
-import ViolationDetailModal from '../../shared-ui';
+import { ViolationDetailModal } from '../../shared-ui';
 
 interface Violation {
   id: string;

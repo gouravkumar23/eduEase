@@ -11,7 +11,7 @@ import {
   CheckCircle2,
   Clock
 } from 'lucide-react';
-import { db } from '../../../core/firebase';
+import { db } from '../../../../core/firebase';
 import { collection, getDocs, query, limit, orderBy } from 'firebase/firestore';
 import { StatCard } from '../../../analytics';
 

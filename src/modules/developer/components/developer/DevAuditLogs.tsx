@@ -9,7 +9,7 @@ import {
   Eye,
   X
 } from 'lucide-react';
-import { db } from '../../../core/firebase';
+import { db } from '../../../../core/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import * as XLSX from 'xlsx';
 

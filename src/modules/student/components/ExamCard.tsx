@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Clock, Calendar, Users, ChevronRight, Loader2, Share2, Lock, Unlock, Eye, EyeOff, Activity, ClipboardCheck, Award, Trash2, Settings, FileText, Key, CheckCircle2, Send, ShieldAlert, Flag, Megaphone, BrainCircuit } from 'lucide-react';
 import { Exam } from '../../exams/hooks/useExams';
 import { ExamStatusBadge } from './ExamStatusBadge';
-import ConfirmationModal from '../../shared-ui';
-import ReleaseConfirmationModal from '../../faculty';
+import { ConfirmationModal } from '../../shared-ui';
+import { ReleaseConfirmationModal } from '../../faculty';
 import { useNavigate } from 'react-router-dom';
 
 interface ExamCardProps {

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen } from 'lucide-react';
 import { useExams, Exam } from '../../exams/hooks/useExams';
 import { ExamCard } from './ExamCard';
-import QuestionManager from '../../faculty';
+import { QuestionManager } from '../../faculty';
 import ExamRulesModal from './ExamRulesModal';
 
 interface ExamListProps {

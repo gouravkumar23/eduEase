@@ -11,8 +11,7 @@ import {
   Users, 
   Loader2
 } from 'lucide-react';
-import RoomChat from '../../room';
-import RoomMembersList from '../../room';
+import { RoomChat, RoomMembersList } from '../../room';
 
 export default function StudentRoomView() {
   const { roomId } = useParams();

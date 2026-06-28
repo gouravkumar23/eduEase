@@ -8,7 +8,7 @@ import {
   ToggleLeft,
   ToggleRight
 } from 'lucide-react';
-import { db } from '../../../core/firebase';
+import { db } from '../../../../core/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export default function DevFeatureFlags() {

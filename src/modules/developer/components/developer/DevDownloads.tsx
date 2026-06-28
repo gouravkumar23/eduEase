@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Download, Plus, X, Loader2, Check, Monitor, Apple, Terminal, CreditCard as Edit2, Trash2 } from 'lucide-react';
 import { db } from '../../../../core/firebase';
 import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore';
-import { Download as DownloadModel, DownloadService } from '../../services/DownloadService';
+import { DownloadService } from '../../../licensing/services/DownloadService';
+import { Download as DownloadModel } from '../../../licensing/repositories/DownloadRepository';
 
 export default function DevDownloads() {
   const [downloads, setDownloads] = useState<DownloadModel[]>([]);

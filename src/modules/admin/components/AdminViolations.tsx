@@ -18,7 +18,7 @@ import {
   Trash2,
   Loader2
 } from 'lucide-react';
-import ViolationDetailModal from '../../shared-ui';
+import { ViolationDetailModal } from '../../shared-ui';
 import * as XLSX from 'xlsx';
 
 interface Violation {

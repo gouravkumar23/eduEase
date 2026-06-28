@@ -13,7 +13,7 @@ import {
   User,
   Lock
 } from 'lucide-react';
-import { db } from '../../../core/firebase';
+import { db } from '../../../../core/firebase';
 import { collection, query, getDocs, orderBy, doc, updateDoc, deleteDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { Developer } from '../../repositories/DeveloperRepository';
 

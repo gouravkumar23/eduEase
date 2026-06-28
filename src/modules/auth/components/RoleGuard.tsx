@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useAuth } from '../../../modules/auth';
 import { PermissionService, Permission } from '../../admin/services/PermissionService';
-import NotFoundPage from '../../shared-pages';
+import { NotFoundPage } from '../../shared-pages';
 
 interface RoleGuardProps {
   children: ReactNode;

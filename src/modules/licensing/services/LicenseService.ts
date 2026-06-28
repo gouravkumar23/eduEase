@@ -1,6 +1,6 @@
 "use client";
 
-import { LicenseRepository, License } from '../repositories/LicenseRepository';
+import { LicenseRepository, License } from '../../admin/repositories/LicenseRepository';
 
 export class LicenseService {
   public static async createLicense(
