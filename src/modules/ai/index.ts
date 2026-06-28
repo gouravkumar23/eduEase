@@ -1,3 +1,9 @@
+// Components
+export { default as GeminiAssistant } from './components/GeminiAssistant';
+export { default as AILearningHub } from './components/AILearningHub';
+export { default as LearningChat } from './components/LearningChat';
+export { default as LearningHubHeader } from './components/LearningHubHeader';
+
 // AI Orchestrator - Single public entry point
 export { AIOrchestrator, aiOrchestrator } from './orchestrator/AIOrchestrator';
 export type { AIGenerationRequest, AIGenerationResponse, AIChunkingOptions } from './orchestrator/AIOrchestrator';
@@ -20,6 +26,3 @@ export { ResponseValidator, responseValidator } from './validators/ResponseValid
 
 // Legacy AI utilities (to be migrated to orchestrator)
 export { getAIConfiguration, runWithAIFallback, getSettings, isRetryableAIError } from './services/ai';
-
-
-export default type

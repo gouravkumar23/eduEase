@@ -220,17 +220,3 @@ export default function DeveloperPortalPage() {
     </div>
   );
 }
-
-import DevSidebar, { DevTab } from '../components/developer/DevSidebar';
-import DevDashboard from '../components/developer/DevDashboard';
-import DevInstitutions from '../components/developer/DevInstitutions';
-import DevDevelopers from '../components/developer/DevDevelopers';
-import DevPlans from '../components/developer/DevPlans';
-import DevLicenses from '../components/developer/DevLicenses';
-import DevDownloads from '../components/developer/DevDownloads';
-import DevAnnouncements from '../components/developer/DevAnnouncements';
-import DevMailQueue from '../components/developer/DevMailQueue';
-import DevAuditLogs from '../components/developer/DevAuditLogs';
-import DevSystemConfig from '../components/developer/DevSystemConfig';
-import DevFeatureFlags from '../components/developer/DevFeatureFlags';
-import DevSettings from '../components/developer/DevSettings';

@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { auth } from '../../../core/firebase';
 import { DeveloperRepository } from '../repositories/DeveloperRepository';
-import NotFoundPage from '../../shared-pages';
+import { NotFoundPage } from '../../shared-pages';
 import { Loader2 } from 'lucide-react';
 
 interface DeveloperGuardProps {

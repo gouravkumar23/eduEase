@@ -1,7 +1,7 @@
 "use client";
 
 import { GraduationCap, Users, Database, FileCheck } from 'lucide-react';
-import StatCard from '../../analytics';
+import { StatCard } from '../../analytics';
 
 interface AdminStatsProps {
   stats: {
