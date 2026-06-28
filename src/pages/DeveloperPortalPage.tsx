@@ -1,7 +1,8 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import { DeveloperService } from '../services/DeveloperService';
 import { DeveloperRepository, Developer } from '../repositories/DeveloperRepository';
-import { FeatureFlagService, FeatureFlag } from '../services/FeatureFlagService';
 import { auth } from '../lib/firebase';
 import { 
   Shield, 
@@ -9,15 +10,22 @@ import {
   Mail, 
   User, 
   Loader2, 
-  Activity, 
-  Database, 
-  Settings, 
-  LogOut, 
-  CheckCircle2, 
   AlertCircle,
-  ToggleLeft,
-  ToggleRight
+  Check
 } from 'lucide-react';
+import DevSidebar, { DevTab } from '../components/developer/DevSidebar';
+import DevDashboard from '../components/developer/DevDashboard';
+import DevInstitutions from '../components/developer/DevInstitutions';
+import DevDevelopers from '../components/developer/DevDevelopers';
+import DevPlans from '../components/developer/DevPlans';
+import DevLicenses from '../components/developer/DevLicenses';
+import DevDownloads from '../components/developer/DevDownloads';
+import DevAnnouncements from '../components/developer/DevAnnouncements';
+import DevMailQueue from '../components/developer/DevMailQueue';
+import DevAuditLogs from '../components/developer/DevAuditLogs';
+import DevSystemConfig from '../components/developer/DevSystemConfig';
+import DevFeatureFlags from '../components/developer/DevFeatureFlags';
+import DevSettings from '../components/developer/DevSettings';
 
 export default function DeveloperPortalPage() {
   const [isBootstrap, setIsBootstrap] = useState(false);
@@ -28,19 +36,7 @@ export default function DeveloperPortalPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [developer, setDeveloper] = useState<Developer | null>(null);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'flags'>('dashboard');
-
-  // Feature Flags State
-  const [flags, setFlags] = useState<Record<FeatureFlag, boolean>>({
-    'AI Enabled': true,
-    'Roadmaps Enabled': false,
-    'Secure Browser Enabled': false,
-    'Institution Enabled': false,
-    'Payments Enabled': false,
-    'Analytics Enabled': true,
-    'Question Generator Enabled': true,
-    'Developer Portal Enabled': true
-  });
+  const [activeTab, setActiveTab] = useState<DevTab>('dashboard');
 
   useEffect(() => {
     checkBootstrapStatus();
@@ -64,7 +60,6 @@ export default function DeveloperPortalPage() {
         const dev = await DeveloperRepository.getById(user.uid);
         if (dev) {
           setDeveloper(dev);
-          loadFeatureFlags();
         } else {
           setDeveloper(null);
         }
@@ -72,14 +67,6 @@ export default function DeveloperPortalPage() {
         setDeveloper(null);
       }
     });
-  };
-
-  const loadFeatureFlags = async () => {
-    const updatedFlags = { ...flags };
-    for (const key of Object.keys(flags) as FeatureFlag[]) {
-      updatedFlags[key] = await FeatureFlagService.isEnabled(key);
-    }
-    setFlags(updatedFlags);
   };
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -96,7 +83,6 @@ export default function DeveloperPortalPage() {
         const dev = await DeveloperService.loginDeveloper(email, password);
         setDeveloper(dev);
       }
-      loadFeatureFlags();
     } catch (err: any) {
       setError(err.message || 'Authentication failed.');
     } finally {
@@ -109,15 +95,9 @@ export default function DeveloperPortalPage() {
     setDeveloper(null);
   };
 
-  const toggleFlag = async (flag: FeatureFlag) => {
-    const newValue = !flags[flag];
-    setFlags(prev => ({ ...prev, [flag]: newValue }));
-    await FeatureFlagService.setFlag(flag, newValue);
-  };
-
   if (checkingBootstrap) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <Loader2 className="w-12 h-12 text-indigo-500 animate-spin" />
       </div>
     );
@@ -206,55 +186,13 @@ export default function DeveloperPortalPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row">
-      {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0">
-        <div className="p-6 flex-1">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="p-2 bg-indigo-600 text-white rounded-xl">
-              <Shield size={20} />
-            </div>
-            <div>
-              <h2 className="font-black text-white text-sm uppercase tracking-widest">Root Console</h2>
-              <p className="text-[10px] text-slate-500 font-bold">Developer Portal</p>
-            </div>
-          </div>
+      <DevSidebar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        developerName={developer.name} 
+        onLogout={handleLogout} 
+      />
 
-          <nav className="space-y-1">
-            <button 
-              onClick={() => setActiveTab('dashboard')} 
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-sm transition-colors ${activeTab === 'dashboard' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:bg-slate-800'}`}
-            >
-              <Activity size={18} /> Dashboard
-            </button>
-            <button 
-              onClick={() => setActiveTab('flags')} 
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-sm transition-colors ${activeTab === 'flags' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:bg-slate-800'}`}
-            >
-              <Settings size={18} /> Feature Flags
-            </button>
-          </nav>
-        </div>
-
-        <div className="p-6 border-t border-slate-800 bg-slate-900">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center font-bold text-xs text-white">
-              {developer.name[0]}
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-bold text-white truncate">{developer.name}</p>
-              <p className="text-[10px] text-slate-500 truncate">System Root</p>
-            </div>
-          </div>
-          <button 
-            onClick={handleLogout} 
-            className="w-full flex items-center gap-2 px-4 py-2 text-slate-400 hover:text-rose-400 transition-colors font-medium text-sm"
-          >
-            <LogOut size={18} /> Logout
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0">
         <header className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
           <h1 className="text-lg font-bold text-white capitalize">{activeTab}</h1>
@@ -265,86 +203,34 @@ export default function DeveloperPortalPage() {
         </header>
 
         <div className="p-8 max-w-5xl w-full mx-auto">
-          {activeTab === 'dashboard' ? (
-            <div className="space-y-8">
-              {/* Stats Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="p-3 bg-indigo-600/10 text-indigo-400 rounded-xl">
-                      <Activity size={24} />
-                    </div>
-                  </div>
-                  <h3 className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">System Status</h3>
-                  <div className="text-2xl font-black text-white">Healthy</div>
-                  <p className="text-[10px] text-slate-500 mt-1">All microservices operational</p>
-                </div>
-
-                <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="p-3 bg-emerald-600/10 text-emerald-400 rounded-xl">
-                      <Database size={24} />
-                    </div>
-                  </div>
-                  <h3 className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Active Databases</h3>
-                  <div className="text-2xl font-black text-white">Firestore Root</div>
-                  <p className="text-[10px] text-slate-500 mt-1">Multi-tenant schema ready</p>
-                </div>
-
-                <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="p-3 bg-amber-600/10 text-amber-400 rounded-xl">
-                      <Settings size={24} />
-                    </div>
-                  </div>
-                  <h3 className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Future Modules</h3>
-                  <div className="text-2xl font-black text-white">Phase 2 Ready</div>
-                  <p className="text-[10px] text-slate-500 mt-1">SaaS licensing & payments</p>
-                </div>
-              </div>
-
-              {/* Placeholder Logs */}
-              <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
-                <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Recent System Logs</h3>
-                <div className="space-y-3 font-mono text-xs text-slate-400">
-                  <div className="flex gap-4">
-                    <span className="text-indigo-400">[INFO]</span>
-                    <span className="text-slate-500">2025-03-10 12:00:00</span>
-                    <span>Enterprise Foundation Upgrade initialized successfully.</span>
-                  </div>
-                  <div className="flex gap-4">
-                    <span className="text-emerald-400">[SUCCESS]</span>
-                    <span className="text-slate-500">2025-03-10 12:01:15</span>
-                    <span>PermissionService and FeatureFlagService registered.</span>
-                  </div>
-                  <div className="flex gap-4">
-                    <span className="text-indigo-400">[INFO]</span>
-                    <span className="text-slate-500">2025-03-10 12:02:30</span>
-                    <span>Backward compatibility verified for existing Admins, Faculty, and Students.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 max-w-2xl">
-              <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider">Global Feature Flags</h3>
-              <div className="space-y-4">
-                {(Object.keys(flags) as FeatureFlag[]).map((flag) => (
-                  <div key={flag} className="flex items-center justify-between p-4 bg-slate-950 rounded-xl border border-slate-800">
-                    <div>
-                      <p className="text-sm font-bold text-white">{flag}</p>
-                      <p className="text-xs text-slate-500">Toggle this module globally across all tenants</p>
-                    </div>
-                    <button onClick={() => toggleFlag(flag)} className="text-indigo-400 hover:text-indigo-300 transition-colors">
-                      {flags[flag] ? <ToggleRight size={32} /> : <ToggleLeft size={32} className="text-slate-600" />}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          {activeTab === 'dashboard' && <DevDashboard />}
+          {activeTab === 'institutions' && <DevInstitutions />}
+          {activeTab === 'developers' && <DevDevelopers />}
+          {activeTab === 'plans' && <DevPlans />}
+          {activeTab === 'licenses' && <DevLicenses />}
+          {activeTab === 'downloads' && <DevDownloads />}
+          {activeTab === 'announcements' && <DevAnnouncements />}
+          {activeTab === 'mailqueue' && <DevMailQueue />}
+          {activeTab === 'auditlogs' && <DevAuditLogs />}
+          {activeTab === 'systemconfig' && <DevSystemConfig />}
+          {activeTab === 'flags' && <DevFeatureFlags />}
+          {activeTab === 'settings' && <DevSettings />}
         </div>
       </main>
     </div>
   );
 }
+
+import DevSidebar, { DevTab } from '../../components/developer/DevSidebar';
+import DevDashboard from '../../components/developer/DevDashboard';
+import DevInstitutions from '../../components/developer/DevInstitutions';
+import DevDevelopers from '../../components/developer/DevDevelopers';
+import DevPlans from '../../components/developer/DevPlans';
+import DevLicenses from '../../components/developer/DevLicenses';
+import DevDownloads from '../../components/developer/DevDownloads';
+import DevAnnouncements from '../../components/developer/DevAnnouncements';
+import DevMailQueue from '../../components/developer/DevMailQueue';
+import DevAuditLogs from '../../components/developer/DevAuditLogs';
+import DevSystemConfig from '../../components/developer/DevSystemConfig';
+import DevFeatureFlags from '../../components/developer/DevFeatureFlags';
+import DevSettings from '../../components/developer/DevSettings';
