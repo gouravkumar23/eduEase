@@ -35,6 +35,7 @@ import InstitutionSettings from './pages/institution/InstitutionSettings';
 import LicensesPage from './pages/institution/LicensesPage';
 import SubscriptionsPage from './pages/institution/SubscriptionsPage';
 import DownloadsPage from './pages/institution/DownloadsPage';
+import RoadmapsPage from './pages/institution/RoadmapsPage';
 
 function AppContent() {
   const { user, loading, logout, setSessionError } = useAuth();
@@ -103,6 +104,7 @@ function AppContent() {
       >
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<InstitutionDashboard />} />
+        <Route path="roadmaps" element={<RoadmapsPage />} />
         <Route path="settings" element={<InstitutionSettings />} />
         <Route path="licenses" element={<LicensesPage />} />
         <Route path="subscriptions" element={<SubscriptionsPage />} />

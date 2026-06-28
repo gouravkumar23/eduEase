@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Building2, Settings, Key, CreditCard, Download, LogOut, X, Activity } from 'lucide-react';
+import { Building2, Settings, Key, CreditCard, Download, LogOut, X, Activity, FolderTree } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -17,6 +17,7 @@ export default function InstitutionSidebar({ isSidebarOpen, setIsSidebarOpen }: 
 
   const navItems = [
     { path: '/institution/dashboard', label: 'Dashboard', icon: Activity },
+    { path: '/institution/roadmaps', label: 'Roadmaps', icon: FolderTree },
     { path: '/institution/licenses', label: 'Licenses', icon: Key },
     { path: '/institution/subscriptions', label: 'Subscriptions', icon: CreditCard },
     { path: '/institution/downloads', label: 'Downloads', icon: Download },
