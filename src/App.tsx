@@ -1,46 +1,63 @@
 import { useEffect } from 'react';
-import { useAuth } from './contexts/AuthContext';
+import { useAuth } from './modules/auth';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from './lib/firebase';
-import Auth from './components/Auth';
-import FacultyDashboard from './components/FacultyDashboard';
-import StudentDashboard from './components/StudentDashboard';
-import AdminDashboard from './components/AdminDashboard';
-import ExamInterface from './components/ExamInterface';
-import ExamReview from './components/ExamReview';
-import LiveMonitor from './components/LiveMonitor';
-import ProctoringDashboard from './components/ProctoringDashboard';
-import StudentResults from './components/StudentResults';
-import PendingApproval from './components/PendingApproval';
-import PublicProfile from './components/PublicProfile';
-import PublicExamDetails from './components/PublicExamDetails';
-import RoomJoinHandler from './components/RoomJoinHandler';
-import PublicMaterialView from './components/PublicMaterialView';
-import PublicLeaderboard from './components/PublicLeaderboard';
-import PublicLeaderboardList from './components/PublicLeaderboardList';
-import StudentRoomView from './components/StudentRoomView';
-import VerifyLinkHandler from './components/VerifyLinkHandler';
-import AILearningHub from './components/AILearningHub';
-import { useFCM } from './hooks/useFCM';
+import { db } from './core';
+import {
+  Auth,
+  PublicProfile,
+  VerifyLinkHandler,
+} from './modules/auth';
+import {
+  FacultyDashboard,
+  ExamReview,
+  LiveMonitor,
+  ProctoringDashboard,
+} from './modules/faculty';
+import {
+  StudentDashboard,
+  StudentResults,
+  PendingApproval,
+  ExamInterface,
+  StudentRoomView,
+} from './modules/student';
+import {
+  AdminDashboard,
+} from './modules/admin';
+import {
+  PublicExamDetails,
+  PublicLeaderboard,
+  PublicLeaderboardList,
+} from './modules/exams';
+import {
+  RoomJoinHandler,
+} from './modules/room';
+import {
+  AILearningHub,
+} from './modules/ai';
+import {
+  PublicMaterialView,
+} from './modules/learning';
+import { useFCM } from './modules/notifications';
 
 // Enterprise Phase 1 & 2 Imports
-import DeveloperPortalPage from './pages/DeveloperPortalPage';
-import DeveloperGuard from './components/DeveloperGuard';
-import NotFoundPage from './pages/NotFoundPage';
-import InstitutionGuard from './components/InstitutionGuard';
-import InstitutionPortalLayout from './pages/institution/InstitutionPortalLayout';
-import InstitutionDashboard from './pages/institution/InstitutionDashboard';
-import InstitutionSettings from './pages/institution/InstitutionSettings';
-import LicensesPage from './pages/institution/LicensesPage';
-import SubscriptionsPage from './pages/institution/SubscriptionsPage';
-import DownloadsPage from './pages/institution/DownloadsPage';
-import RoadmapsPage from './pages/institution/RoadmapsPage';
+import { DeveloperPortalPage, DeveloperGuard } from './modules/developer';
+import { NotFoundPage } from './modules/shared-pages';
+import {
+  InstitutionGuard,
+  InstitutionPortalLayout,
+  InstitutionDashboard,
+  InstitutionSettings,
+  LicensesPage,
+  SubscriptionsPage,
+  DownloadsPage,
+  RoadmapsPage,
+} from './modules/institution';
 
 function AppContent() {
   const { user, loading, logout, setSessionError } = useAuth();
   const location = useLocation();
-  
+
   // Initialize FCM token registration and listeners
   useFCM();
 
@@ -50,13 +67,13 @@ function AppContent() {
       if (!user) return;
 
       const localSessionId = localStorage.getItem("sessionId");
-      if (!localSessionId) return; 
+      if (!localSessionId) return;
 
       try {
         const userDoc = await getDoc(doc(db, 'users', user.id));
         if (userDoc.exists()) {
           const activeSessionId = userDoc.data().activeSessionId;
-          
+
           if (activeSessionId && localSessionId !== activeSessionId) {
             setSessionError("You were logged out because your account logged in elsewhere.");
             logout();
@@ -84,18 +101,18 @@ function AppContent() {
   return (
     <Routes>
       {/* Hidden Developer Portal Route */}
-      <Route 
-        path="/internal/developer" 
+      <Route
+        path="/internal/developer"
         element={
           <DeveloperGuard>
             <DeveloperPortalPage />
           </DeveloperGuard>
-        } 
+        }
       />
 
       {/* Institution Portal Routes */}
-      <Route 
-        path="/institution" 
+      <Route
+        path="/institution"
         element={
           <InstitutionGuard>
             <InstitutionPortalLayout />
@@ -119,7 +136,7 @@ function AppContent() {
       <Route path="/leaderboard/:examId" element={<PublicLeaderboard />} />
       <Route path="/leaderboards" element={<PublicLeaderboardList />} />
       <Route path="/verify" element={<VerifyLinkHandler />} />
-      
+
       {/* Auth Routes */}
       {!user || !user.emailVerified ? (
         <>
